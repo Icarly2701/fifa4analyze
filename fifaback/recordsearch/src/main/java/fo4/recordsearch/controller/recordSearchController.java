@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import fo4.recordsearch.domain.UserInfo;
 import fo4.recordsearch.service.UserRecordService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +55,7 @@ public class recordSearchController {
 
 
     @GetMapping("/userInformation")
-    public void getAccessId(@RequestParam String nickname) throws IOException {
+    public void getAccessId(@RequestParam String nickname) throws IOException, ParseException {
         this.nickname = nickname;
 
         //uri 생성
@@ -69,15 +72,30 @@ public class recordSearchController {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> data = objectMapper.readValue(responseEntity.getBody(), Map.class);
 
-        UserInfo userInfo = new UserInfo();
-        userInfo.setAccessId(String.valueOf(data.get("accessId")));
-        userInfo.setLevel(Integer.parseInt(data.get("level").toString()));
-        userInfo.setNickname(String.valueOf(data.get("nickname")));
+//        UserInfo userInfo = new UserInfo();
+//        userInfo.setAccessId(String.valueOf(data.get("accessId")));
+//        userInfo.setLevel(Integer.parseInt(data.get("level").toString()));
+//        userInfo.setNickname(String.valueOf(data.get("nickname")));
+//
+//        this.accessId = String.valueOf(data.get("accessId"));
+//        userRecordService.save(userInfo);
 
-        this.accessId = String.valueOf(data.get("accessId"));
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(responseEntity.getBody());
+        JSONObject jsonObj = (JSONObject) obj;
+
+        log.info("accessId = {}", jsonObj.get("accessId"));
+        UserInfo userInfo = new UserInfo();
+        userInfo.setAccessId(String.valueOf(jsonObj.get("accessId")));
+        userInfo.setLevel(Integer.parseInt(jsonObj.get("level").toString()));
+        userInfo.setNickname(String.valueOf(jsonObj.get("nickname")));
+
+        this.accessId = String.valueOf(jsonObj.get("accessId"));
         userRecordService.save(userInfo);
 
+
         getRecordInfo(userInfo);
+        getMatchInfo(userInfo.getMatchId().get(0));
     }
 
     private HttpHeaders getHttpHeaders() {
@@ -124,4 +142,36 @@ public class recordSearchController {
 
         userInfo.setMatchId(data);
     }
+
+    private void getMatchInfo(String matchRecordId) throws ParseException {
+
+//        6472172152e06e5fb62d7de3
+        URI uri = getMatchRecordidUri(matchRecordId);
+
+        //header 생성
+        HttpHeaders httpHeaders = getHttpHeaders();
+
+        // 데이터 가져오기
+        HttpEntity<?> requestMessage = new HttpEntity<>("", httpHeaders);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestMessage, String.class);
+
+
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(responseEntity.getBody());
+        JSONObject jsonObj = (JSONObject) obj;
+        userRecordService.matchRecordHandling(jsonObj);
+
+    }
+
+    private URI getMatchRecordidUri(String matchRecordId) {
+        log.info("matchInfoID : {}", matchRecordId);
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://api.nexon.co.kr/fifaonline4/v1.0")
+                .path("/matches/"+ matchRecordId)
+                .encode()
+                .build()
+                .toUri();
+        return uri;
+    }
+
 }
