@@ -7,6 +7,7 @@ import fo4.recordsearch.domain.UserInfo;
 import fo4.recordsearch.service.UserRecordService;
 import lombok.extern.slf4j.Slf4j;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -96,6 +97,7 @@ public class recordSearchController {
 
         getRecordInfo(userInfo);
         getMatchInfo(userInfo.getMatchId().get(0));
+
     }
 
     private HttpHeaders getHttpHeaders() {
@@ -173,5 +175,7 @@ public class recordSearchController {
                 .toUri();
         return uri;
     }
+
+
 
 }
