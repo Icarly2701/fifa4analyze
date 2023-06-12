@@ -1,15 +1,14 @@
 import './App.css';
 import {BrowserRouter,Route,Routes} from 'react-router-dom';
 import Basicpage from './component/Basicpage';
-import Record from './record/record';
-
+import Record from './record/Record';
 function App() {
   
   return (
     <BrowserRouter>
       <Routes>
         <Route path = '/' element={<Basicpage />} />
-        <Route path = '/record/:nickname' element={<Record />} />
+        <Route path = '/record/:nickname' element={< Record/>} />
       </Routes>
     </BrowserRouter>
   );

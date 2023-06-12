@@ -1,36 +1,58 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
-    logo:"",
-    nickname:"",
-    level:0,
-    renew:false,
-    tier:"",
-    mypomation:"",
     bestpomation:"",
     worstpomation:"",
     playfix:"",
     worstplayer:[],
-    record:[{
-            oppnickname:"",
-            result:"",
-            score:"",
-            time:"",
-        },  
-    ],
+    renew:false,
+    mainData:{
+        nickname:"",
+        level:0,
+        tier:"",
+        mypomation:"",
+        record:[],
+    },
 }
+
+export const getData = createAsyncThunk(
+    'history/getData',
+    async(nickname) => {
+        const response = await axios.get("/userInformation?nickname="+nickname)
+            .then((res) => {
+                console.log(res.data.level);
+                return res.data;
+            })
+            .catch((Error) => {
+                console.log(Error);
+                return "";
+            });
+
+        return response;
+    }
+)
 
 export const pageinfo = createSlice({
     name: 'history',
-    initialState,
-    reducers : {
-        setNickname(state, action) {
-            state.nickname = action.payload;
-            console.log(state.nickname);
-        }
+    initialState: initialState,
+    reducers:{},
+    extraReducers : (builder) => {
+        builder.addCase(getData.pending, (state) => {
+            state.renew = false;
+        })
+        builder.addCase(getData.fulfilled, (state, action)=>{
+            console.log(action);
+            state.mainData = action.payload;
+            state.renew = true;
+            console.log(state);
+        })
+        builder.addCase(getData.rejected, (state)=>{
+            state.renew = false;
+            alert("존재하지 않는 ID 입니다.");
+        })
     }
 })
 
-export const {setNickname} = pageinfo.actions;
 export default pageinfo.reducer;
 

@@ -1,16 +1,17 @@
 import { useCallback, useState } from 'react';
 import { useDispatch, } from 'react-redux';
 import {Link} from 'react-router-dom';
-
+import { getData} from '../pageinfo';
 const Basicpage = () => {
     const [nickname , setNickname] = useState('');
+    const dispatch = useDispatch();
+
     const onChangeNickname = useCallback((e) => {
         setNickname(e.target.value);
     }, []);
-    const dispatch = useDispatch();
 
     function setnickname(){
-        dispatch(setNickname(nickname));
+        dispatch(getData(nickname));
     }
 
     return(
@@ -26,7 +27,7 @@ const Basicpage = () => {
                 </div>
                 <div className='nickname-btn'>
                     <Link to = {`/record/${nickname}`}>
-                    <input type='button' value="검색하기" className='nickname-btn'/>
+                    <input type='button' value="검색하기" className='nickname-btn' onClick={setnickname}/>
                     </Link>
                 </div>
             </div>

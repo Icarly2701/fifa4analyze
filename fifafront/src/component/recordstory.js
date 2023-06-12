@@ -1,17 +1,18 @@
-const recordstory = () => {
+const Recordstory = (props) => {
+    const result = props.result;
     return(
-        <div className="resultBox">
+        <div className="resultBox" style={{background: result === "승" ? "#ECF2FF" : result === "패" ? "#FFF1F3" : "#ECEEF0"}}>
             <div className="vsNickname">
-                vs KangwonUniv
+                {props.nickname}
             </div>
             <div className="resultScore">
-                승
+                {props.result}
             </div>
             <div className="score">
-                2:0
+                {props.score}
             </div>
         </div>
     );
 }
 
-export default recordstory
+export default Recordstory
