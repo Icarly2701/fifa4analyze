@@ -29,7 +29,7 @@ const RecordPage = () => {
                     </div>
                     <div className="tier" style={{marginLeft:30}} >
                         TIER: 
-                        <div className="nickname-box">프로 1부</div>
+                        <div className="nickname-box">{mainData.tier}</div>
                     </div>
                 </div>
 
@@ -40,7 +40,7 @@ const RecordPage = () => {
                 <div className="pomation">
                     <div className="yours-pomation">
                         YOUR FORMATION: 
-                        <div className="nickname-box">4-2-3-1</div>
+                        <div className="nickname-box">{mainData.mypomation}</div>
                     </div>
                     {/*
                     <div className="bestworst-pomation">

@@ -11,6 +11,7 @@ import fo4.recordsearch.service.SavePostDtoList;
 import fo4.recordsearch.service.UserRecordService;
 import lombok.extern.slf4j.Slf4j;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -55,6 +56,5 @@ public class recordSearchController {
         this.nickname = nickname;
         return userRecordService.getData(nickname);
     }
-
 
 }

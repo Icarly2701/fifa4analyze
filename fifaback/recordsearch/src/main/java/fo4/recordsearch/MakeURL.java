@@ -44,4 +44,13 @@ public class MakeURL {
         return uri;
     }
 
+    public URI getBestDivisionRecordidUri(String accessId) {
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://api.nexon.co.kr/fifaonline4/v1.0")
+                .path("/users/" + accessId + "/maxdivision")
+                .encode()
+                .build()
+                .toUri();
+        return uri;
+    }
 }

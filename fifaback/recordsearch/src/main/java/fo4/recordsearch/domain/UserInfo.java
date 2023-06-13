@@ -14,4 +14,6 @@ public class UserInfo {
     private String accessId;
     private Integer level;
     private List<String> matchId;
+    private String tier;
+    private String formation;
 }
