@@ -1,10 +1,17 @@
-import { useSelector } from "react-redux"
+import { useSelector,useDispatch } from "react-redux"
 import renew from "../images/renew.png";
 import Recordstory from "./Recordstory";
 import Recordheader from "./Recordheader";
+import { getData } from "../pageinfo";
 
 const RecordPage = () => {
     const mainData = useSelector((state) => state.mainData);
+    const dispatch = useDispatch();
+
+    function setnickname(){
+        dispatch(getData({nickname:mainData.nickname, red:"yes"}));
+    }
+   
     let tier;
     switch(mainData.tier){
         case "유망주1":
@@ -82,7 +89,7 @@ const RecordPage = () => {
 
                 <div className="logoBox">
                     <div className="renew">
-                        <img src={renew} className="renew-picture" alt="새로고침" />
+                        <img src={renew} className="renew-picture" alt="새로고침" onClick={setnickname}/>
                     </div>
                     <div className="tier" style={{marginLeft:30}} >
                         최고 티어: 
