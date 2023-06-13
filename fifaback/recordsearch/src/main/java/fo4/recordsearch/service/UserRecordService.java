@@ -2,6 +2,8 @@ package fo4.recordsearch.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import fo4.recordsearch.ConnectionFifa;
+import fo4.recordsearch.Entity.MatchInfoEntity;
+import fo4.recordsearch.Entity.UserInfoEntity;
 import fo4.recordsearch.MakeHeader;
 import fo4.recordsearch.MakeURL;
 import fo4.recordsearch.assignmentdata.GetAccessId;
@@ -11,8 +13,9 @@ import fo4.recordsearch.assignmentdata.GetRecordInfo;
 import fo4.recordsearch.domain.MatchRecordInfo;
 import fo4.recordsearch.domain.UserInfo;
 import fo4.recordsearch.dto.PostDto;
+import fo4.recordsearch.repository.JpaRepository;
 import fo4.recordsearch.repository.RecordRepository;
-import fo4.recordsearch.repository.TempRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -37,11 +40,17 @@ public class UserRecordService {
     private GetFormation getFormation = new GetFormation();
     private String accessId;
 
-    public UserRecordService(TempRepository tempRepository){
-        recordRepository = tempRepository;
+//    public UserRecordService(TempRepository tempRepository){
+//        recordRepository = tempRepository;
+//    }
+
+    public UserRecordService(JpaRepository jpaRepository){
+        recordRepository = jpaRepository;
     }
 
-    public void save(UserInfo userInfo){
+
+    public void save(UserInfoEntity userInfoEntity, UserInfo userInfo){
+        recordRepository.save(userInfoEntity);
         recordRepository.save(userInfo);
     }
 
@@ -51,6 +60,8 @@ public class UserRecordService {
         userInfo.setMatchId(getRecordInfo.getRecordInfo(accessId));
         userInfo.setTier(getDivision.getDivision(accessId));
 
+
+
         for(int i = 0; i < userInfo.getMatchId().size(); i++) {
             JSONObject matchInfo = getMatchInfo.getMatchInfo(userInfo.getMatchId().get(i));
             MatchRecordInfo matchRecordInfo = getMatchInfo.saveData(matchInfo, userInfo.getNickname());
@@ -59,10 +70,24 @@ public class UserRecordService {
                 userInfo.setFormation(getFormation.getFormationInfo(matchRecordInfo.getMatchInfo()));
     
             PostDto.result result = matchRecordHandling(matchRecordInfo);
+            log.info(userInfo.getMatchId().get(i));
+            MatchInfoEntity matchInfoEntity = new MatchInfoEntity(
+                    accessId, userInfo.getMatchId().get(i),result.getResult(), result.getOppnickname(), result.getScore(), result.getTime()
+            );
+
+            recordRepository.matchRecordSave(matchInfoEntity);
+
             savePostDtoList.saveAsList(result);
         }
+        UserInfoEntity userInfoEntity = new UserInfoEntity(
+                userInfo.getNickname(),
+                userInfo.getAccessId(),
+                userInfo.getLevel(),
+                userInfo.getTier(),
+                userInfo.getFormation()
+        );
+        save(userInfoEntity, userInfo);
 
-        save(userInfo);
         log.info("formation = {}", userInfo.getFormation());
         List<PostDto.result> resultList = new ArrayList<>(savePostDtoList.getResultList());
         savePostDtoList.clearList();
@@ -81,6 +106,7 @@ public class UserRecordService {
         SaveRecordService saveRecordService = new SaveRecordService(matchRecordInfo);
         return saveRecordService.record;
     }
+
 
 
 }
