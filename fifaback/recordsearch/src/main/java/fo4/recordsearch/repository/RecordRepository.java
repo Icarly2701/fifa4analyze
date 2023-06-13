@@ -4,6 +4,8 @@ import fo4.recordsearch.Entity.MatchInfoEntity;
 import fo4.recordsearch.Entity.UserInfoEntity;
 import fo4.recordsearch.domain.MatchRecordInfo;
 import fo4.recordsearch.domain.UserInfo;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +20,6 @@ public interface RecordRepository {
     void matchRecordSave(MatchInfoEntity matchInfo);
     Optional<UserInfoEntity> findById(String accessId);
     List<MatchInfoEntity> getMatchRecordInfo(String accessId);
-
     Optional<UserInfoEntity> getUserInfo(String nickName);
 
 }

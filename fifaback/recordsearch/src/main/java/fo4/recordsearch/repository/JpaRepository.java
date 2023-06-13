@@ -7,6 +7,8 @@ import fo4.recordsearch.domain.UserInfo;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -55,16 +57,16 @@ public class JpaRepository implements RecordRepository{
 
     @Override
     public List<MatchInfoEntity> getMatchRecordInfo(String accessId) {
-        String jpql = "SELECT * FROM matchinfo b WHERE b.accessId = :accessId";
-        List<MatchInfoEntity> list = em.createQuery(jpql, MatchInfoEntity.class)
-                .setParameter("accessId", accessId)
-                .getResultList();
+        List<MatchInfoEntity> list = em.createQuery(
+                "SELECT * FROM matchinfo b WHERE b.accessId = :accessId",
+                MatchInfoEntity.class
+        ).setParameter("accessId", accessId)
+                        .getResultList();
 
         log.info("{}", list);
         return list;
 
     }
-
 
 
     public Optional<UserInfoEntity> getUserInfo(String nickName) {
