@@ -1,19 +1,19 @@
 package fo4.recordsearch.service;
 
 import fo4.recordsearch.domain.MatchRecordInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 public class GetFormation {
 
     private List<Long> getPlayerPositionInfo(JSONObject matchRecordInfo){
 
         List<Long> playerPosition = new ArrayList<>();
         JSONArray players = (JSONArray) matchRecordInfo.get("player");
-
         for (int i = 0; i < players.size(); i++){
             JSONObject player = (JSONObject) players.get(i);
             playerPosition.add((Long) player.get("spPosition"));

@@ -51,19 +51,24 @@ public class UserRecordService {
         userInfo.setMatchId(getRecordInfo.getRecordInfo(accessId));
         userInfo.setTier(getDivision.getDivision(accessId));
 
+        int j = 0;
         for(int i = 0; i < userInfo.getMatchId().size(); i++) {
+
             JSONObject matchInfo = getMatchInfo.getMatchInfo(userInfo.getMatchId().get(i));
             MatchRecordInfo matchRecordInfo = getMatchInfo.saveData(matchInfo, userInfo.getNickname());
 
-            if(i == 0)
+            if(i == j) {
+                JSONArray players = (JSONArray) matchRecordInfo.getMatchInfo().get("player");
+                if(players.size() == 0){
+                    j++;
+                }
                 userInfo.setFormation(getFormation.getFormationInfo(matchRecordInfo.getMatchInfo()));
-    
+            }
             PostDto.result result = matchRecordHandling(matchRecordInfo);
             savePostDtoList.saveAsList(result);
         }
 
         save(userInfo);
-        log.info("formation = {}", userInfo.getFormation());
         List<PostDto.result> resultList = new ArrayList<>(savePostDtoList.getResultList());
         savePostDtoList.clearList();
 
@@ -81,6 +86,4 @@ public class UserRecordService {
         SaveRecordService saveRecordService = new SaveRecordService(matchRecordInfo);
         return saveRecordService.record;
     }
-
-
 }
