@@ -4,7 +4,8 @@ const Record = () => {
     const renew = useSelector((state) => state.renew);
     return(
         <>
-            {renew ? <RecordPage /> : <div></div>}
+        {renew ? 
+        <RecordPage /> : <></>}
         </>
     )  
 }

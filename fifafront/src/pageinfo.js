@@ -21,12 +21,11 @@ export const getData = createAsyncThunk(
     async(nickname) => {
         const response = await axios.get("/userInformation?nickname="+nickname)
             .then((res) => {
-                console.log(res.data.level);
                 return res.data;
             })
             .catch((Error) => {
-                console.log(Error);
-                return "";
+                alert("존재하지 않습니다");
+                return Error;
             });
 
         return response;
@@ -36,7 +35,12 @@ export const getData = createAsyncThunk(
 export const pageinfo = createSlice({
     name: 'history',
     initialState: initialState,
-    reducers:{},
+    reducers:{
+        setRenew(state){
+            state.renew = false;
+            console.log("asdfasdfasdfasdfsafd");
+        }
+    },
     extraReducers : (builder) => {
         builder.addCase(getData.pending, (state) => {
             state.renew = false;
@@ -54,5 +58,6 @@ export const pageinfo = createSlice({
     }
 })
 
+export const {setRenew} = pageinfo.actions;
 export default pageinfo.reducer;
 

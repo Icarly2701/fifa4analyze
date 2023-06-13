@@ -1,18 +1,75 @@
 import { useSelector } from "react-redux"
-import logo from "../images/logo.png";
 import renew from "../images/renew.png";
 import Recordstory from "./Recordstory";
 import Recordheader from "./Recordheader";
 
 const RecordPage = () => {
     const mainData = useSelector((state) => state.mainData);
+    let tier;
+    switch(mainData.tier){
+        case "유망주1":
+            tier = "amature1";
+            break;
+        case "유망주2":
+            tier= "amature2";
+            break;
+        case "유망주3":
+            tier= "amature3";
+            break;
+        case "세미프로1":
+            tier= "semipro1";
+            break;
+        case "세미프로2":
+            tier= "semipro2";
+            break;
+        case "세미프로3":
+            tier= "semipro3";
+            break;
+        case "프로1":
+            tier = "pro1";
+            break;
+        case "프로2":
+            tier = "pro2";
+            break;
+        case "프로3":
+            tier = "pro3";
+            break;
+        case "월드클래스1":
+            tier = "worldclass1";
+            break;
+        case "월드클래스2":
+            tier = "worldclass2";
+            break;
+        case "월드클래스3":
+            tier = "worldclass3";
+            break;
+        case "챌린지1":
+            tier = "challenge1";
+            break;
+        case "챌린지2":
+            tier = "challenge2";
+            break;
+        case "챌린지3":
+            tier = "challenge3";
+            break;
+        case "슈퍼챌린지":
+            tier = "superchallenge";
+            break;
+        case "챔피언스":
+            tier = "champions";
+            break;                
+        default :
+            tier = "superchampions";
+    }
+
     return(
+        
         <div className="centerBox">
             <Recordheader />
             <div className="headerBox">
                 <div className="logoBox">
                     <div className="logo">
-                        <img src={logo} className="logo-picture"  alt="로고" />
+                        <img src={process.env.PUBLIC_URL + "/" +tier+ ".png"} className="logo-picture"  alt="로고" />
                     </div>
                     <div className="nickname" style={{marginLeft:30, marginRight:30, display:"flex",}}>
                         <div className="nickname-box">{mainData.nickname}</div>
@@ -28,7 +85,7 @@ const RecordPage = () => {
                         <img src={renew} className="renew-picture" alt="새로고침" />
                     </div>
                     <div className="tier" style={{marginLeft:30}} >
-                        TIER: 
+                        최고 티어: 
                         <div className="nickname-box">{mainData.tier}</div>
                     </div>
                 </div>
@@ -39,7 +96,7 @@ const RecordPage = () => {
 
                 <div className="pomation">
                     <div className="yours-pomation">
-                        YOUR FORMATION: 
+                        사용 포메이션: 
                         <div className="nickname-box">{mainData.mypomation}</div>
                     </div>
                     {/*

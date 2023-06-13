@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector, } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom';
-import { getData} from './pageinfo';
+import { getData, setRenew,} from './pageinfo';
 const Basicpage = () => {
     const [nickname , setNickname] = useState('');
     const renew = useSelector((state) => state.renew);
@@ -10,10 +10,13 @@ const Basicpage = () => {
     const onChangeNickname = useCallback((e) => {
         setNickname(e.target.value);
     }, []);
+
     useEffect(() => {
-        if(renew)
+        if(renew){
             navigate(`/record/${nickname}`);
+        }
     }, [renew])
+
     function setnickname(){
         dispatch(getData(nickname));
     }
@@ -40,5 +43,4 @@ const Basicpage = () => {
         </div>
     );
 }
-
 export default Basicpage;
