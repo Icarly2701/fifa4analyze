@@ -53,13 +53,23 @@ public class GetFormation {
             }
         }
 
-        StringBuilder sb = new StringBuilder();
+//        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
+//        if (DF > 0) sb.append(DF);
+//        if (DM > 0) sb.append('-' + DM);
+//        if (CM > 0) sb.append('-' + CM);
+//        if (AM > 0) sb.append('-' + AM);
+//        if (FW > 0) sb.append('-' + FW);
+//        if (ST > 0) sb.append('-' + ST);
         if (DF > 0) sb.append(DF);
-        if (DM > 0) sb.append('-' + DM);
-        if (CM > 0) sb.append('-' + CM);
-        if (AM > 0) sb.append('-' + AM);
-        if (FW > 0) sb.append('-' + FW);
-        if (ST > 0) sb.append('-' + ST);
+        if (DM > 0) {sb.append('-'); sb.append(DM);}
+        if (CM > 0) {sb.append('-'); sb.append(CM);}
+        if (AM > 0) {sb.append('-'); sb.append(AM);}
+        if (FW > 0) {sb.append('-'); sb.append(FW);}
+        if (ST > 0) {sb.append('-'); sb.append(ST);}
+
+
+
         String result = sb.toString();
         return result;
     }
