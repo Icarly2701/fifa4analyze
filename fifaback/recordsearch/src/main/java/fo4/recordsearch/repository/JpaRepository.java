@@ -6,12 +6,15 @@ import fo4.recordsearch.domain.MatchRecordInfo;
 import fo4.recordsearch.domain.UserInfo;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
 @Repository
+@Slf4j
 public class JpaRepository implements RecordRepository{
 
 
@@ -51,18 +54,21 @@ public class JpaRepository implements RecordRepository{
     }
 
     @Override
-    public MatchRecordInfo getMatchRecordInfo() {
-        return null;
+    public List<MatchInfoEntity> getMatchRecordInfo(String accessId) {
+        String jpql = "SELECT * FROM matchinfo b WHERE b.accessId = :accessId";
+        List<MatchInfoEntity> list = em.createQuery(jpql, MatchInfoEntity.class)
+                .setParameter("accessId", accessId)
+                .getResultList();
+
+        log.info("{}", list);
+        return list;
+
     }
 
-    @Override
-    public UserInfo getUserInfo() {
-        return null;
-    }
 
 
-    public Optional<UserInfoEntity> getUserInfo(String accessId) {
-        UserInfoEntity userInfoEntity = em.find(UserInfoEntity.class, accessId);
+    public Optional<UserInfoEntity> getUserInfo(String nickName) {
+        UserInfoEntity userInfoEntity = em.find(UserInfoEntity.class, nickName);
         return Optional.ofNullable(userInfoEntity);
     }
 }

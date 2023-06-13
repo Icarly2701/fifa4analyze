@@ -7,6 +7,7 @@ import fo4.recordsearch.MakeHeader;
 import fo4.recordsearch.MakeURL;
 import fo4.recordsearch.domain.UserInfo;
 import fo4.recordsearch.dto.PostDto;
+import fo4.recordsearch.service.GetRepositoryService;
 import fo4.recordsearch.service.SavePostDtoList;
 import fo4.recordsearch.service.UserRecordService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,12 +38,14 @@ import java.util.Map;
 public class recordSearchController {
 
     private UserRecordService userRecordService;
+    private GetRepositoryService getRepositoryService;
     private SavePostDtoList savePostDtoList;
     private String nickname;
 
-    public recordSearchController(UserRecordService userRecordService, SavePostDtoList savePostDtoList) {
+    public recordSearchController(UserRecordService userRecordService, SavePostDtoList savePostDtoList, GetRepositoryService getRepositoryService) {
         this.userRecordService = userRecordService;
         this.savePostDtoList = savePostDtoList;
+        this.getRepositoryService = getRepositoryService;
     }
 
     @GetMapping("/")
@@ -52,9 +55,17 @@ public class recordSearchController {
 
 
     @GetMapping("/userInformation")
-    public PostDto.userRecord getAccessId(@RequestParam String nickname) throws IOException, ParseException {
+    public PostDto.userRecord getAccessId(@RequestParam String nickname,
+                                            @RequestParam String isrenew) throws IOException, ParseException {
         this.nickname = nickname;
-        return userRecordService.getData(nickname);
+
+        if (isrenew.equals("yes")) {        // 새로고침
+            return userRecordService.getData(nickname);
+        }
+        else{                               // 그냥 검색
+            return getRepositoryService.getUserInfo(nickname);
+        }
+
     }
 
 }
