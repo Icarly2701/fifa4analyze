@@ -18,7 +18,7 @@ const Recordheader = () => {
     }, [renew])*/
 
     function setnickname(){
-        dispatch(getData(nickname));
+        dispatch(getData({nickname:nickname, red:"no"}));
     }
 
     const goToHome = () => {
