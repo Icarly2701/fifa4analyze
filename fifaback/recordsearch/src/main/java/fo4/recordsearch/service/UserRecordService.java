@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -45,9 +47,7 @@ public class UserRecordService {
         UserInfo userInfo = getAccessId.getAccessId(nickname);
         this.accessId = userInfo.getAccessId();
         userInfo.setMatchId(getRecordInfo.getRecordInfo(accessId));
-
         save(userInfo);
-
         for(String matchId : userInfo.getMatchId()) {
             JSONObject matchInfo = getMatchInfo.getMatchInfo(matchId);
             MatchRecordInfo matchRecordInfo = getMatchInfo.saveData(matchInfo, userInfo.getNickname());
@@ -55,10 +55,12 @@ public class UserRecordService {
             savePostDtoList.saveAsList(result);
         }
 
+        List<PostDto.result> resultList = new ArrayList<>(savePostDtoList.getResultList());
+        savePostDtoList.clearList();
         return PostDto.userRecord.builder()
                 .nickname(userInfo.getNickname())
                 .level(userInfo.getLevel())
-                .records(savePostDtoList.getResultList())
+                .records(resultList)
                 .build();
     }
 

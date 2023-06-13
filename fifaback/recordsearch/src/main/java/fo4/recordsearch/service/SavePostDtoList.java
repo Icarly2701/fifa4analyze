@@ -19,4 +19,6 @@ public class SavePostDtoList {
     public void saveAsList(PostDto.result record){
         resultList.add(record);
     }
+
+    public void clearList(){resultList.clear();}
 }

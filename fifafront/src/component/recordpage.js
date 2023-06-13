@@ -7,7 +7,7 @@ import Recordheader from "./Recordheader";
 const RecordPage = () => {
     const mainData = useSelector((state) => state.mainData);
     return(
-        <div className="centerBox" style={{marginTop:"5%"}}>
+        <div className="centerBox">
             <Recordheader />
             <div className="headerBox">
                 <div className="logoBox">
