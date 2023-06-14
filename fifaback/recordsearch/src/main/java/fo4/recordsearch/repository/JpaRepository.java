@@ -5,6 +5,7 @@ import fo4.recordsearch.Entity.UserInfoEntity;
 import fo4.recordsearch.domain.MatchRecordInfo;
 import fo4.recordsearch.domain.UserInfo;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -61,29 +62,34 @@ public class JpaRepository implements RecordRepository {
     public List<MatchInfoEntity> getMatchRecordInfo(String access_id) {
         log.info("access_id = {}", access_id);
         List<MatchInfoEntity> list = em.createQuery(
-                        "SELECT  * FROM MatchInfoEntity  WHERE access_id = :access_id",
+                        "SELECT b FROM MatchInfoEntity b  WHERE b.access_id = :access_id",
                         MatchInfoEntity.class
                 ).setParameter("access_id", access_id)
                 .getResultList();
 
 
         log.info("{}", list);
-        return new ArrayList<>();
+        return list;
 
     }
 
     public Optional<UserInfoEntity> getUserInfo(String nickName) {
-        UserInfoEntity nickname = em.createQuery(
+        TypedQuery<UserInfoEntity> user = em.createQuery(
                 "SELECT b FROM UserInfoEntity b WHERE b.nickname = :nickname",
                 UserInfoEntity.class
-        ).setParameter("nickname", nickName).getSingleResult();
+        ).setParameter("nickname", nickName);
 
-        log.info("UserinfoEntoty = {}", nickname);
-        return Optional.ofNullable(nickname);
+        try{
+            UserInfoEntity singleResult = user.getSingleResult();
+            return Optional.ofNullable(singleResult);
+        }catch(NoResultException e){
+            return Optional.ofNullable(null);
+        }
     }
 
     @Override
-    public void updateUserInfo(String nickName) {
+    public void updateUserInfo(String accessId) {
+        UserInfoEntity userInfoEntity = em.find(UserInfoEntity.class, accessId);
 
     }
 }

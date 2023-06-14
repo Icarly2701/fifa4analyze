@@ -32,7 +32,9 @@ public class GetRepositoryService {
     public PostDto.userRecord getUserInfo(String nickName) throws ParseException, JsonProcessingException {
 
         Optional<UserInfoEntity> userInfoEntity = recordRepository.getUserInfo(nickName);
-        log.info("{}", userInfoEntity);
+
+        log.info("userinfoentity = {}", userInfoEntity);
+
         if (userInfoEntity.isEmpty()){
             return userRecordService.getData(nickName);
         }
