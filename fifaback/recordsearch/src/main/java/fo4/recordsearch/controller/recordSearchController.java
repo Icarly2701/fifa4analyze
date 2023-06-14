@@ -62,7 +62,8 @@ public class recordSearchController {
         if (isrenew.equals("yes")) {        // 새로고침
             return userRecordService.getData(nickname);
         }
-        else{                               // 그냥 검색
+        else{
+            log.info("asdfasdf");// 그냥 검색
             return getRepositoryService.getUserInfo(nickname);
         }
 
