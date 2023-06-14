@@ -60,7 +60,7 @@ public class recordSearchController {
         this.nickname = nickname;
         log.info("{}", isrenew);
         if (isrenew.equals("yes")) {        // 새로고침
-            return userRecordService.getData(nickname);
+            return userRecordService.getData(nickname, isrenew);
         }
         else{
             log.info("asdfasdf");// 그냥 검색

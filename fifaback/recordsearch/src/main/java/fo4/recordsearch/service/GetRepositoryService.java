@@ -36,7 +36,7 @@ public class GetRepositoryService {
         log.info("userinfoentity = {}", userInfoEntity);
 
         if (userInfoEntity.isEmpty()){
-            return userRecordService.getData(nickName);
+            return userRecordService.getData(nickName , "no");
         }
         PostDto postDto = new PostDto();
 

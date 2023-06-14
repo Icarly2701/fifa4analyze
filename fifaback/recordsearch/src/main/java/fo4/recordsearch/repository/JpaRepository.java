@@ -9,11 +9,8 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +18,6 @@ import java.util.Optional;
 @Repository
 @Slf4j
 public class JpaRepository implements RecordRepository {
-
 
     private UserInfo userInfo;
     private MatchRecordInfo matchRecordInfo;
@@ -52,13 +48,6 @@ public class JpaRepository implements RecordRepository {
     }
 
     @Override
-    public Optional<UserInfoEntity> findById(String accessId) {
-//        List<String> matchIdList = Optional.ofNullable(em.find(MatchInfoEntity.class, accessId))
-//                .orElseGet(ArrayList::new);
-        return null;
-    }
-
-    @Override
     public List<MatchInfoEntity> getMatchRecordInfo(String access_id) {
         log.info("access_id = {}", access_id);
         List<MatchInfoEntity> list = em.createQuery(
@@ -66,19 +55,15 @@ public class JpaRepository implements RecordRepository {
                         MatchInfoEntity.class
                 ).setParameter("access_id", access_id)
                 .getResultList();
-
-
-        log.info("{}", list);
         return list;
-
     }
 
+    @Override
     public Optional<UserInfoEntity> getUserInfo(String nickName) {
         TypedQuery<UserInfoEntity> user = em.createQuery(
                 "SELECT b FROM UserInfoEntity b WHERE b.nickname = :nickname",
                 UserInfoEntity.class
         ).setParameter("nickname", nickName);
-
         try{
             UserInfoEntity singleResult = user.getSingleResult();
             return Optional.ofNullable(singleResult);
@@ -88,8 +73,18 @@ public class JpaRepository implements RecordRepository {
     }
 
     @Override
-    public void updateUserInfo(String accessId) {
-        UserInfoEntity userInfoEntity = em.find(UserInfoEntity.class, accessId);
-
+    public void deleteMatchInfo(String nickname){
+        Optional<UserInfoEntity> userInfo = getUserInfo(nickname);
+        List<MatchInfoEntity> matchRecordInfo = getMatchRecordInfo(userInfo.get().getAccess_id());
+        for(MatchInfoEntity m : matchRecordInfo)
+            em.remove(m);
     }
+
+    @Override
+    public void deleteUserInfo(String nickname) {
+        Optional<UserInfoEntity> userInfo = getUserInfo(nickname);
+        em.remove(userInfo.get());
+    }
+
+
 }

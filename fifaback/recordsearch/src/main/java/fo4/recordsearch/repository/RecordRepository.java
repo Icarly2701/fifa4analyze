@@ -18,11 +18,10 @@ public interface RecordRepository {
     void matchRecordSave(MatchRecordInfo matchRecordInfo);
     void save(UserInfoEntity userInfoEntity);
     void matchRecordSave(MatchInfoEntity matchInfo);
-    Optional<UserInfoEntity> findById(String accessId);
+    void deleteMatchInfo(String nickname);
+    void deleteUserInfo(String nickname);
+
     List<MatchInfoEntity> getMatchRecordInfo(String accessId);
-
     Optional<UserInfoEntity> getUserInfo(String nickName);
-
-    void updateUserInfo(String nickName);
 
 }

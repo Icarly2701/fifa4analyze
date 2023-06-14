@@ -19,7 +19,7 @@ const initialState = {
 export const getData = createAsyncThunk(
     'history/getData',
     async(data) => {
-        const response = await axios.get("/userInformation?nickname="+data.nickname + "&renew=" + data.red)
+        const response = await axios.get("/userInformation?nickname="+data.nickname + "&isrenew=" + data.red)
             .then((res) => {
                 return res.data;
             })

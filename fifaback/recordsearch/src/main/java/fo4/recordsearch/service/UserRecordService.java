@@ -40,32 +40,25 @@ public class UserRecordService {
     private GetFormation getFormation = new GetFormation();
     private String accessId;
 
-//    public UserRecordService(TempRepository tempRepository){
-//        recordRepository = tempRepository;
-//    }
-
     public UserRecordService(JpaRepository jpaRepository){
         recordRepository = jpaRepository;
     }
 
-
-    public void save(UserInfoEntity userInfoEntity, UserInfo userInfo){
-        recordRepository.save(userInfoEntity);
-        recordRepository.save(userInfo);
-    }
-
-    public PostDto.userRecord getData(String nickname) throws ParseException, JsonProcessingException {
+    public PostDto.userRecord getData(String nickname, String isrenew) throws ParseException, JsonProcessingException {
         UserInfo userInfo = getAccessId.getAccessId(nickname);
         this.accessId = userInfo.getAccessId();
         userInfo.setMatchId(getRecordInfo.getRecordInfo(accessId));
         userInfo.setTier(getDivision.getDivision(accessId));
 
+        if(isrenew.equals("yes")){
+            recordRepository.deleteMatchInfo(nickname);
+            recordRepository.deleteUserInfo(nickname);
+        }
+
         int j = 0;
         for(int i = 0; i < userInfo.getMatchId().size(); i++) {
-
             JSONObject matchInfo = getMatchInfo.getMatchInfo(userInfo.getMatchId().get(i));
             MatchRecordInfo matchRecordInfo = getMatchInfo.saveData(matchInfo, userInfo.getNickname());
-
             if(i == j) {
                 JSONArray players = (JSONArray) matchRecordInfo.getMatchInfo().get("player");
                 if(players.size() == 0){
@@ -74,15 +67,30 @@ public class UserRecordService {
                 userInfo.setFormation(getFormation.getFormationInfo(matchRecordInfo.getMatchInfo()));
             }
             PostDto.result result = matchRecordHandling(matchRecordInfo);
-            log.info(userInfo.getMatchId().get(i));
-            MatchInfoEntity matchInfoEntity = new MatchInfoEntity(
-                    accessId, userInfo.getMatchId().get(i),result.getResult(), result.getOppnickname(), result.getScore(), result.getTime()
-            );
-
+            MatchInfoEntity matchInfoEntity = getMatchInfoEntity(userInfo, i, result);
             recordRepository.matchRecordSave(matchInfoEntity);
-
+            recordRepository.matchRecordSave(matchRecordInfo);
             savePostDtoList.saveAsList(result);
         }
+
+        UserInfoEntity userInfoEntity = getUserInfoEntity(userInfo);
+
+        recordRepository.save(userInfo);
+        recordRepository.save(userInfoEntity);
+
+        List<PostDto.result> resultList = new ArrayList<>(savePostDtoList.getResultList());
+        savePostDtoList.clearList();
+
+        return getBuild(userInfo, resultList);
+    }
+
+    public PostDto.result matchRecordHandling(MatchRecordInfo matchRecordInfo){
+        recordRepository.matchRecordSave(matchRecordInfo);
+        SaveRecordService saveRecordService = new SaveRecordService(matchRecordInfo);
+        return saveRecordService.record;
+    }
+
+    private UserInfoEntity getUserInfoEntity(UserInfo userInfo) {
         UserInfoEntity userInfoEntity = new UserInfoEntity(
                 userInfo.getNickname(),
                 userInfo.getAccessId(),
@@ -90,12 +98,17 @@ public class UserRecordService {
                 userInfo.getTier(),
                 userInfo.getFormation()
         );
-        save(userInfoEntity, userInfo);
+        return userInfoEntity;
+    }
 
+    private MatchInfoEntity getMatchInfoEntity(UserInfo userInfo, int i, PostDto.result result) {
+        MatchInfoEntity matchInfoEntity = new MatchInfoEntity(
+                accessId, userInfo.getMatchId().get(i), result.getResult(), result.getOppnickname(), result.getScore(), result.getTime()
+        );
+        return matchInfoEntity;
+    }
 
-        List<PostDto.result> resultList = new ArrayList<>(savePostDtoList.getResultList());
-        savePostDtoList.clearList();
-
+    private PostDto.userRecord getBuild(UserInfo userInfo, List<PostDto.result> resultList) {
         return PostDto.userRecord.builder()
                 .nickname(userInfo.getNickname())
                 .level(userInfo.getLevel())
@@ -103,12 +116,6 @@ public class UserRecordService {
                 .mypomation(userInfo.getFormation())
                 .tier(userInfo.getTier())
                 .build();
-    }
-
-    public PostDto.result matchRecordHandling(MatchRecordInfo matchRecordInfo){
-        recordRepository.matchRecordSave(matchRecordInfo);
-        SaveRecordService saveRecordService = new SaveRecordService(matchRecordInfo);
-        return saveRecordService.record;
     }
 
 
