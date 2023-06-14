@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MatchInfoEntity {
 
-    @Column(name = "accessid")
-    private String accessid;
+    @Column(name = "access_id")
+    private String access_id;
 
     @Id
     @Column(name = "match_id")
@@ -32,8 +32,8 @@ public class MatchInfoEntity {
     @Column(name = "match_date")
     private String match_date;
 
-    public MatchInfoEntity(String accessId, String matchId, String matchResult, String oppNickName, String matchScore, String matchDate) {
-        this.accessid = accessId;
+    public MatchInfoEntity(String access_id, String matchId, String matchResult, String oppNickName, String matchScore, String matchDate) {
+        this.access_id = access_id;
         this.match_id = matchId;
         this.match_result = matchResult;
         this.opp_nickname = oppNickName;

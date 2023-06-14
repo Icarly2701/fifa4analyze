@@ -20,6 +20,9 @@ public interface RecordRepository {
     void matchRecordSave(MatchInfoEntity matchInfo);
     Optional<UserInfoEntity> findById(String accessId);
     List<MatchInfoEntity> getMatchRecordInfo(String accessId);
+
     Optional<UserInfoEntity> getUserInfo(String nickName);
+
+    void updateUserInfo(String nickName);
 
 }

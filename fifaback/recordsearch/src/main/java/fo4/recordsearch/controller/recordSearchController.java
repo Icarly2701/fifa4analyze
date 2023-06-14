@@ -58,7 +58,7 @@ public class recordSearchController {
     public PostDto.userRecord getAccessId(@RequestParam String nickname,
                                             @RequestParam String isrenew) throws IOException, ParseException {
         this.nickname = nickname;
-
+        log.info("{}", isrenew);
         if (isrenew.equals("yes")) {        // 새로고침
             return userRecordService.getData(nickname);
         }
