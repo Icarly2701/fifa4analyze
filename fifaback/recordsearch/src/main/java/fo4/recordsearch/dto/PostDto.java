@@ -19,6 +19,7 @@ public class PostDto {
         public String tier;
         public String mypomation;
         public List<PostDto.result> records;
+        public String date;
     }
     @Data
     @AllArgsConstructor

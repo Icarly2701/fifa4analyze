@@ -1,5 +1,5 @@
 import { useSelector,useDispatch } from "react-redux"
-import renew from "../images/renew.png";
+import renew from "../images/logo2.png";
 import Recordstory from "./Recordstory";
 import Recordheader from "./Recordheader";
 import { getData } from "../pageinfo";
@@ -71,7 +71,8 @@ const RecordPage = () => {
 
     return(
         
-        <div className="centerBox">
+        <div className="centerBox" style={{marginTop:"3%", marginLeft:"5%", marginRight:"5%", marginBottom:"3%",paddingBottom:"0%",paddingTop:"3%"
+        , backgroundColor:"rgba(255, 255, 255, 0.9)"}}>
             <Recordheader />
             <div className="headerBox">
                 <div className="logoBox">
@@ -90,6 +91,7 @@ const RecordPage = () => {
                 <div className="logoBox">
                     <div className="renew">
                         <img src={renew} className="renew-picture" alt="새로고침" onClick={setnickname}/>
+                        {/*<p>{mainData.date}</p>*/}
                     </div>
                     <div className="tier" style={{marginLeft:30}} >
                         최고 티어: 

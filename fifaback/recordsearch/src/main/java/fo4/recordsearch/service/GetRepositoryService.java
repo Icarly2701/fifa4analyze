@@ -13,6 +13,8 @@ import org.apache.catalina.User;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,9 @@ public class GetRepositoryService {
 
         Optional<UserInfoEntity> userInfoEntity = recordRepository.getUserInfo(nickName);
 
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
+        String formatedNow = now.format(formatter);
         log.info("userinfoentity = {}", userInfoEntity);
 
         if (userInfoEntity.isEmpty()){
@@ -59,6 +64,7 @@ public class GetRepositoryService {
                 .records(presult)
                 .mypomation(userInfoEntity.get().getFormation())
                 .tier(userInfoEntity.get().getTier())
+                .date(formatedNow)
                 .build();
     }
 

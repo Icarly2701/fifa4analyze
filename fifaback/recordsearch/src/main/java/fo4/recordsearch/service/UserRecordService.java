@@ -23,6 +23,8 @@ import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,11 @@ public class UserRecordService {
         this.accessId = userInfo.getAccessId();
         userInfo.setMatchId(getRecordInfo.getRecordInfo(accessId));
         userInfo.setTier(getDivision.getDivision(accessId));
+
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
+        String formatedNow = now.format(formatter);
+
 
         if(isrenew.equals("yes")){
             recordRepository.deleteMatchInfo(nickname);
@@ -81,7 +88,7 @@ public class UserRecordService {
         List<PostDto.result> resultList = new ArrayList<>(savePostDtoList.getResultList());
         savePostDtoList.clearList();
 
-        return getBuild(userInfo, resultList);
+        return getBuild(userInfo, resultList, formatedNow);
     }
 
     public PostDto.result matchRecordHandling(MatchRecordInfo matchRecordInfo){
@@ -108,13 +115,14 @@ public class UserRecordService {
         return matchInfoEntity;
     }
 
-    private PostDto.userRecord getBuild(UserInfo userInfo, List<PostDto.result> resultList) {
+    private PostDto.userRecord getBuild(UserInfo userInfo, List<PostDto.result> resultList, String date) {
         return PostDto.userRecord.builder()
                 .nickname(userInfo.getNickname())
                 .level(userInfo.getLevel())
                 .records(resultList)
                 .mypomation(userInfo.getFormation())
                 .tier(userInfo.getTier())
+                .date(date)
                 .build();
     }
 

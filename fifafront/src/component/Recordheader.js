@@ -33,7 +33,7 @@ const Recordheader = () => {
             <div>
                 <input placeholder="닉네임을 입력하세요" type='text'
                     value={nickname} onChange={onChangeNickname}
-                    style={{width:200, height:30, fontSize:15}}
+                    style={{width:250, height:30, fontSize:15, border:"none"}}
                 />
                 <Link to = {`/record/${nickname}`}>
                     <input type='button' value="검색하기" className='nickname-btn' onClick={setnickname} style={{height:40, fontSize:15}}/>

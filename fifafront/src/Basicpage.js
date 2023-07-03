@@ -34,7 +34,7 @@ const Basicpage = () => {
                 <div>
                     <input placeholder="닉네임을 입력하세요" type='text'
                     value={nickname} onChange={onChangeNickname}
-                    style={{width:500, height:50, fontSize:20}}/>
+                    style={{width:500, height:50, fontSize:20, border:"none"}}/>
                 </div>
                 <div className='nickname-btn'>
                     <input type='button' value="검색하기" className='nickname-btn' onClick={setnickname}/>
