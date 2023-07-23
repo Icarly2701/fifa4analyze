@@ -71,6 +71,8 @@ public class UserRecordService {
                 if(players.size() == 0){
                     j++;
                 }
+                GetWorstPlayer getWorstPlayer = new GetWorstPlayer();
+                getWorstPlayer.getWorst(players);
                 userInfo.setFormation(getFormation.getFormationInfo(matchRecordInfo.getMatchInfo()));
             }
             PostDto.result result = matchRecordHandling(matchRecordInfo);
