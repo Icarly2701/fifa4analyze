@@ -79,7 +79,6 @@ public class UserRecordService {
             recordRepository.matchRecordSave(matchRecordInfo);
             savePostDtoList.saveAsList(result);
         }
-
         UserInfoEntity userInfoEntity = getUserInfoEntity(userInfo);
 
         recordRepository.save(userInfo);
