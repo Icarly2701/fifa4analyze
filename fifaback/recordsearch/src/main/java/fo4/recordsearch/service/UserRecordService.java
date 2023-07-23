@@ -40,6 +40,11 @@ public class UserRecordService {
     private GetDivision getDivision = new GetDivision();
     private SavePostDtoList savePostDtoList = new SavePostDtoList();
     private GetFormation getFormation = new GetFormation();
+
+    private GetAdvice getAdvice;
+
+    private GetWorstPlayer getWorstPlayer;
+
     private String accessId;
 
     public UserRecordService(JpaRepository jpaRepository){
@@ -72,7 +77,11 @@ public class UserRecordService {
                     j++;
                 }
                 GetWorstPlayer getWorstPlayer = new GetWorstPlayer();
-                getWorstPlayer.getWorst(players);
+                log.info("{}", getWorstPlayer.getWorst(players));
+                List<String > worstPlayers = getWorstPlayer.getWorst(players);
+                userInfo.setWorstP1(worstPlayers.get(0));
+                userInfo.setWorstP2(worstPlayers.get(1));
+                userInfo.setWorstP3(worstPlayers.get(2));
                 userInfo.setFormation(getFormation.getFormationInfo(matchRecordInfo.getMatchInfo()));
             }
             PostDto.result result = matchRecordHandling(matchRecordInfo);
@@ -81,6 +90,9 @@ public class UserRecordService {
             recordRepository.matchRecordSave(matchRecordInfo);
             savePostDtoList.saveAsList(result);
         }
+        getAdvice = new GetAdvice(userInfo.getFormation());
+        userInfo.setArch_enemy(getAdvice.getOppFormation());
+        userInfo.setAdvice(getAdvice.getAdvice());
         UserInfoEntity userInfoEntity = getUserInfoEntity(userInfo);
 
         recordRepository.save(userInfo);
@@ -104,7 +116,12 @@ public class UserRecordService {
                 userInfo.getAccessId(),
                 userInfo.getLevel(),
                 userInfo.getTier(),
-                userInfo.getFormation()
+                userInfo.getFormation(),
+                userInfo.getArch_enemy(),
+                userInfo.getAdvice(),
+                userInfo.getWorstP1(),
+                userInfo.getWorstP2(),
+                userInfo.getWorstP3()
         );
         return userInfoEntity;
     }
@@ -124,6 +141,11 @@ public class UserRecordService {
                 .mypomation(userInfo.getFormation())
                 .tier(userInfo.getTier())
                 .date(date)
+                .worstformation(userInfo.getArch_enemy())
+                .playerfix(userInfo.getAdvice())
+                .worstP1(userInfo.getWorstP1())
+                .worstP2(userInfo.getWorstP2())
+                .worstP3(userInfo.getWorstP3())
                 .build();
     }
 

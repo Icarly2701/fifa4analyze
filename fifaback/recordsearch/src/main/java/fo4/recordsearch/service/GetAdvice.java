@@ -4,10 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetAdvice {
-    String myFormation;
-    List<String> oppFormation;
-    String advice;
+    private String myFormation;
+    private String oppFormation;
+    private String advice;
 
+    public String  getOppFormation() {
+        return oppFormation;
+    }
+
+    public String getAdvice() {
+        return advice;
+    }
 
     public GetAdvice(String myFormation) {
         this.myFormation = myFormation;
@@ -15,42 +22,33 @@ public class GetAdvice {
         this.advice = howToPlay();
     }
 
-    private List<String> oppFormation(){
-        List<String> list = new ArrayList<>();
+    private String oppFormation(){
+        String arc;
 
         if(myFormation.equals("4-2-3-1")){
-            list.add("4-3-3");
-            list.add("3-5-2");
+            arc = "4-3-3";
         } else if (myFormation.equals("4-3-2-1")) {
-            list.add("4-4-2");
-            list.add("4-1-2-1-2");
+            arc = "4-4-2";
         } else if (myFormation.equals("4-3-3")) {
-            list.add("4-4-2");
-            list.add("4-2-2-2");
+            arc = "4-4-2";
         } else if (myFormation.equals("4-2-2-2")) {
-            list.add("4-1-2-1-2");
-            list.add("4-3-3");
+            arc = "4-1-2-1-2";
         } else if (myFormation.equals("4-1-2-1-2")) {
-            list.add("4-4-2");
-            list.add("4-2-2-2");
+            arc = "4-4-2";
         } else if (myFormation.equals("4-4-2")) {
-            list.add("4-3-1-2");
-            list.add("5-3-2");
+            arc = "4-3-1-2";
         } else if (myFormation.equals("4-2-1-3")) {
-            list.add("5-3-2");
-            list.add("5-2-3");
+            arc = "5-2-3";
         } else if(myFormation.equals("5-2-3") || myFormation.equals("5-3-2")) {
-            list.add("4-2-3-1");
-            list.add("4-4-2");
+            arc = "4-2-3-1";
         } else if(myFormation.equals("5-2-1-3")){
-            list.add("4-2-3-1");
-            list.add("4-4-2");
+            arc = "4-2-3-1";
         }
         else {
-            list.add("4-2-3-1");
+            arc = "4-2-3-1";
         }
 
-        return list;
+        return arc;
     }
 
     private String howToPlay(){

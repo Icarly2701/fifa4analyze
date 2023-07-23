@@ -20,6 +20,12 @@ public class PostDto {
         public String mypomation;
         public List<PostDto.result> records;
         public String date;
+        public String worstformation;
+        public String playerfix;
+        public String worstP1;
+        public String worstP2;
+        public String worstP3;
+
     }
     @Data
     @AllArgsConstructor
