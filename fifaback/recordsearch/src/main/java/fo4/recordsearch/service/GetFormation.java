@@ -22,36 +22,7 @@ public class GetFormation {
         return playerPosition;
     }
 
-    public List<String> oppFormation(String myFormation){
-        List<String> list = new ArrayList<>();
 
-        if(myFormation.equals("4-2-3-1")){
-            list.add("4-3-3");
-            list.add("3-5-2");
-        } else if (myFormation.equals("4-3-2-1")) {
-            list.add("4-4-2");
-            list.add("4-1-2-1-2");
-        } else if (myFormation.equals("4-3-3")) {
-            list.add("4-4-2");
-            list.add("4-2-2-2");
-        } else if (myFormation.equals("4-2-2-2")) {
-            list.add("4-1-2-1-2");
-            list.add("4-3-3");
-        } else if (myFormation.equals("4-1-2-1-2")) {
-            list.add("4-4-2");
-            list.add("4-2-2-2");
-        } else if (myFormation.equals("4-4-2")) {
-            list.add("4-3-1-2");
-            list.add("5-3-2");
-        } else if (myFormation.equals("4-2-1-3")) {
-            list.add("5-3-2");
-            list.add("5-2-3");
-        }else {
-            list.add("4-2-3-1");
-        }
-
-        return list;
-    }
 
     public String getFormationInfo(JSONObject matchRecordInfo) {
 
