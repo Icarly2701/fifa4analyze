@@ -65,6 +65,11 @@ public class GetRepositoryService {
                 .mypomation(userInfoEntity.get().getFormation())
                 .tier(userInfoEntity.get().getTier())
                 .date(formatedNow)
+                .worstpomation(userInfoEntity.get().getOppFormation())
+                .playfix(userInfoEntity.get().getAdvice())
+                .worstP1(userInfoEntity.get().getWorstP1())
+                .worstP2(userInfoEntity.get().getWorstP2())
+                .worstP3(userInfoEntity.get().getWorstP3())
                 .build();
     }
 
